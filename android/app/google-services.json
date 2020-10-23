@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "1040999788483",
+    "firebase_url": "https://emprecogplat-33c02.firebaseio.com",
+    "project_id": "emprecogplat-33c02",
+    "storage_bucket": "emprecogplat-33c02.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1040999788483:android:3f393e7f93c96f60489776",
+        "android_client_info": {
+          "package_name": "com.example.emp_recog_plat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1040999788483-cjnh9p4n7bnhfh3utmd793opl3jsnf4g.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCscXgcSk1VFG-s-V34EdNl9bC2lPS2hwI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1040999788483-cjnh9p4n7bnhfh3utmd793opl3jsnf4g.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
