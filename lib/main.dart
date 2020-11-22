@@ -1,3 +1,4 @@
+import 'package:emp_recog_plat/core/firebase/firebase.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -23,8 +24,9 @@ Future<dynamic> showNotification(Map<String, dynamic> message) async {
         NotificationDetails(
             android: androidNotifDetails, iOS: new IOSNotificationDetails()));
   }
+  return Future<void>.value();
 }
-
+ 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await di.init();
@@ -49,12 +51,22 @@ class _MyAppState extends State<MyApp> {
         new AndroidInitializationSettings("@mipmap/ic_launcher");
     _localNotificationsPlugin.initialize(new InitializationSettings(
         android: androidSettings, iOS: new IOSInitializationSettings()));
+
+    Future.delayed(Duration.zero, () {
+      FirebaseInit.fcm.configure(
+        onMessage: (Map<String, dynamic> message) async {
+          print(message);
+          showNotification(message);
+        },
+        // onBackgroundMessage: showNotification,
+      );
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'EmpRecogPlat',
+      title: 'Cheerio',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primaryColor: Color.fromRGBO(0, 96, 255, 1),

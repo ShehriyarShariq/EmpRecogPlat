@@ -15,28 +15,33 @@ class CredentialsRepositoryImpl extends CredentialsRepository {
   @override
   Future<Either<Failure, bool>> signInWithCredentials(
       CredentialsModel credentials) async {
-    if (networkInfo.isConnected != null) {
+    if (await networkInfo.isConnected) {
       try {
         print(FirebaseInit.auth);
         await FirebaseInit.auth.signInWithEmailAndPassword(
             email: credentials.email, password: credentials.password);
 
-        print("WTH");
         User currentUser = FirebaseInit.auth.currentUser;
 
-        print(currentUser.uid);
+        bool isAdmin = (await FirebaseInit.dbRef
+            .child("admin/${currentUser.uid}")
+            .once()
+            .then((snapshot) => snapshot.value != null));
 
-        if (currentUser.emailVerified) {
-          bool isAdmin = (await FirebaseInit.dbRef
-              .child("admin/${currentUser.uid}")
-              .once()
-              .then((snapshot) => snapshot.value != null));
+        if (!isAdmin) {
+          if (currentUser.emailVerified) {
+            await FirebaseInit.fcm.subscribeToTopic(currentUser.uid);
+            await FirebaseInit.fcm.subscribeToTopic("scheduled_notifs");
 
-          return Right(isAdmin);
-        } else {
-          return Left(
-              AuthFailure(errorMsg: "Please verify your email to continue."));
+            return Right(false);
+          } else {
+            await FirebaseInit.auth.signOut();
+            return Left(
+                AuthFailure(errorMsg: "Please verify your email to continue."));
+          }
         }
+
+        return Right(true);
       } on FirebaseAuthException catch (e) {
         return Left(AuthFailure(errorMsg: e.message));
       }
@@ -48,7 +53,7 @@ class CredentialsRepositoryImpl extends CredentialsRepository {
   @override
   Future<Either<Failure, bool>> signUpWithCredentials(
       CredentialsModel credentials) async {
-    if (networkInfo.isConnected != null) {
+    if (await networkInfo.isConnected) {
       try {
         await FirebaseInit.dbRef
             .child("unregistered_employees/${credentials.empID}")
@@ -68,7 +73,7 @@ class CredentialsRepositoryImpl extends CredentialsRepository {
 
           await FirebaseInit.dbRef.child("employee/${currentUser.uid}").set({
             "id": snapshot.key,
-            "name": snapshot.value['name'],
+            "name": snapshot.value['name'].toString().toLowerCase(),
             "email": snapshot.value['email'],
             "designation": snapshot.value['designation'],
           }).then((value) async {

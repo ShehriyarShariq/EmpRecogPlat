@@ -1,9 +1,12 @@
 class EmployeeModel {
-  String id, name, imageURL, designation, about, rank, totalCheers;
+  String uid, id, name, imageURL, designation, about, rank, totalCheers;
   List<String> badges;
   Map<String, String> traitCheers;
 
+  Map<String, String> alreadyVoted;
+
   EmployeeModel({
+    this.uid,
     this.id,
     this.name,
     this.imageURL,
@@ -16,12 +19,16 @@ class EmployeeModel {
   });
 
   factory EmployeeModel.fromJson(Map<String, dynamic> json) => EmployeeModel(
-      id: json["id"],
-      name: json["name"],
-      imageURL: json["imageURL"],
-      designation: json["designation"],
-      about: json["about"],
-      badges: json.containsKey("badges")
-          ? Map<String, String>.from(json["badges"]).values.toList()
-          : []);
+        id: json["id"],
+        name: json["name"]
+            .toString()
+            .split(" ")
+            .map((element) => element
+                .toLowerCase()
+                .replaceRange(0, 1, element[0].toUpperCase()))
+            .join(" "),
+        imageURL: json["imageURL"],
+        designation: json["designation"],
+        about: json["about"],
+      );
 }

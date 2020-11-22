@@ -2,6 +2,7 @@ import 'package:emp_recog_plat/features/admin_dashboard/presentation/pages/admin
 import 'package:emp_recog_plat/features/emp_dashboard/presentation/pages/emp_dashboard.dart';
 import 'package:emp_recog_plat/features/splash/domain/repositories/splash_repository.dart';
 import 'package:emp_recog_plat/features/splash/presentation/bloc/bloc/splash_bloc.dart';
+import 'package:emp_recog_plat/features/splash/presentation/pages/onboarding.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -31,21 +32,13 @@ class _SplashState extends State<Splash> {
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(
       SystemUiOverlayStyle(
-          statusBarColor: Theme.of(context).primaryColor,
+          statusBarColor: Colors.transparent,
           statusBarBrightness: Brightness.light),
     );
 
-    Future.delayed(Duration(seconds: 2), () {
-      SystemChrome.setSystemUIOverlayStyle(
-        SystemUiOverlayStyle(statusBarColor: Colors.transparent),
-      );
-      Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (_) => SignInBodyWidget()));
-    });
-
     return BlocListener(
       cubit: _bloc,
-      listener: (context, state) {
+      listener: (context, state) async {
         if (state is Success) {
           if (state.map['isSignedIn']) {
             if (state.map['isEmp']) {
@@ -56,13 +49,51 @@ class _SplashState extends State<Splash> {
                   MaterialPageRoute(builder: (_) => AdminDashboard()));
             }
           } else {
-            Navigator.of(context).pushReplacement(
-                MaterialPageRoute(builder: (_) => SignInBodyWidget()));
+            if (await sl<SplashRepository>().getIsNewUser()) {
+              Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(builder: (_) => Onboarding()));
+            } else {
+              Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(builder: (_) => SignInBodyWidget()));
+            }
           }
+        } else if (state is Error) {
+          Future.delayed(Duration(seconds: 1), () async {
+            if (await sl<SplashRepository>().getIsNewUser()) {
+              Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(builder: (_) => Onboarding()));
+            } else {
+              Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(builder: (_) => SignInBodyWidget()));
+            }
+          });
         }
       },
-      child: Container(
-        color: Theme.of(context).primaryColor,
+      child: Scaffold(
+        body: Container(
+          color: Colors.lightBlueAccent.withOpacity(0.2),
+          child: Stack(
+            children: [
+              Align(
+                alignment: Alignment.center,
+                child: Image.asset("imgs/cheerio_logo.png"),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Text(
+                    "A Project for TMB",
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.black.withOpacity(0.6),
+                    ),
+                  ),
+                ),
+              )
+            ],
+          ),
+        ),
       ),
     );
   }

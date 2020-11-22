@@ -1,4 +1,5 @@
 import 'package:emp_recog_plat/features/admin_dashboard/presentation/pages/admin_leaderboard.dart';
+import 'package:emp_recog_plat/features/emp_dashboard/presentation/pages/emp_leaderboards.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -23,16 +24,16 @@ class _AdminDashboardState extends State<AdminDashboard> {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
 
     return Scaffold(
-      body: SafeArea(
-        child: PageView(
-          physics: NeverScrollableScrollPhysics(),
-          controller: _pageController,
-          onPageChanged: onPageChanged,
-          children: [
-            AdminActivityLog(),
-            AdminLeaderboard(),
-          ],
-        ),
+      body: PageView(
+        physics: NeverScrollableScrollPhysics(),
+        controller: _pageController,
+        onPageChanged: onPageChanged,
+        children: [
+          AdminActivityLog(),
+          EmployeeLeaderboard(
+            isAdmin: true,
+          ),
+        ],
       ),
       bottomNavigationBar: BottomAppBar(
         child: Row(

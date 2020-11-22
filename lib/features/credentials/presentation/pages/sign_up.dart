@@ -56,12 +56,11 @@ class _SignUpBodyWidgetState extends State<SignUpBodyWidget> {
                       Container(
                         width: MediaQuery.of(context).size.width * 0.75,
                         margin: EdgeInsets.only(
-                            top: MediaQuery.of(context).size.height * 0.12,
-                            bottom: 50),
-                        child: Text(
-                          "TMB",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(fontSize: 48),
+                            top: MediaQuery.of(context).size.height * 0.06,
+                            bottom: 20),
+                        child: Align(
+                          alignment: Alignment.center,
+                          child: Image.asset("imgs/cheerio_logo.png"),
                         ),
                       ),
                       Column(mainAxisSize: MainAxisSize.max, children: <Widget>[
@@ -264,11 +263,19 @@ class _SignUpBodyWidgetState extends State<SignUpBodyWidget> {
                   highlightColor: Colors.transparent,
                   splashColor: Colors.transparent,
                   onTap: () {
-                    if (_isEmployee) {
-                      setState(() {
-                        _isEmployee = false;
-                      });
-                    }
+                    Fluttertoast.showToast(
+                        msg: "Admin Signup disabled",
+                        toastLength: Toast.LENGTH_SHORT,
+                        gravity: ToastGravity.BOTTOM,
+                        timeInSecForIosWeb: 1,
+                        backgroundColor: Colors.grey[700],
+                        textColor: Colors.white,
+                        fontSize: 16.0);
+                    // if (_isEmployee) {
+                    //   setState(() {
+                    //     _isEmployee = false;
+                    //   });
+                    // }
                   },
                   child: Container(
                     decoration: BoxDecoration(
@@ -278,17 +285,18 @@ class _SignUpBodyWidgetState extends State<SignUpBodyWidget> {
                         border: Border.all(
                             color: !_isEmployee
                                 ? Theme.of(context).primaryColor
-                                : Colors.black.withOpacity(0.4)),
+                                : Colors.black.withOpacity(0.2)),
                         borderRadius: BorderRadius.circular(3)),
                     child: Center(
                       child: Text(
                         "Admin",
                         style: TextStyle(
+                            decoration: TextDecoration.lineThrough,
                             fontSize: 17,
                             fontFamily: Constant.DEFAULT_FONT,
                             color: !_isEmployee
                                 ? Theme.of(context).primaryColor
-                                : Colors.black.withOpacity(0.4)),
+                                : Colors.black.withOpacity(0.2)),
                       ),
                     ),
                   ),

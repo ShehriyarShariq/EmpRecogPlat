@@ -72,12 +72,11 @@ class _SignInBodyWidgetState extends State<SignInBodyWidget> {
                     Container(
                       width: MediaQuery.of(context).size.width * 0.75,
                       margin: EdgeInsets.only(
-                          top: MediaQuery.of(context).size.height * 0.12,
-                          bottom: 50),
-                      child: Text(
-                        "TMB",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(fontSize: 48),
+                          top: MediaQuery.of(context).size.height * 0.06,
+                          bottom: 20),
+                      child: Align(
+                        alignment: Alignment.center,
+                        child: Image.asset("imgs/cheerio_logo.png"),
                       ),
                     ),
                     Container(

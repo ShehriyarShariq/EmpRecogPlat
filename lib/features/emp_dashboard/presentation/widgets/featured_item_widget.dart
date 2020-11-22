@@ -1,11 +1,13 @@
+import 'package:emp_recog_plat/features/emp_dashboard/data/models/emp_model.dart';
 import 'package:flutter/material.dart';
 
 class FeaturedItemWidget extends StatelessWidget {
   final bool isBig;
   final String title, position;
+  final EmployeeModel employee;
 
   const FeaturedItemWidget(
-      {Key key, this.position, this.isBig = true, this.title})
+      {Key key, this.isBig = true, this.title, this.employee, this.position})
       : super(key: key);
 
   @override
@@ -16,7 +18,7 @@ class FeaturedItemWidget extends StatelessWidget {
         if (title != null) ...[
           Container(
             decoration: BoxDecoration(
-                color: Theme.of(context).primaryColor,
+                color: Theme.of(context).primaryColor.withOpacity(0.7),
                 borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(10),
                     topRight: Radius.circular(10))),
@@ -38,11 +40,41 @@ class FeaturedItemWidget extends StatelessWidget {
                 AspectRatio(
                   aspectRatio: 1.4,
                   child: Card(
-                    color: Colors.white.withOpacity(0.95),
+                    elevation: employee?.imageURL != null ? 0 : 1,
+                    color: Colors.white,
                     margin: const EdgeInsets.only(bottom: 20),
                     child: Stack(
                       children: [
                         if (isBig) ...[
+                          Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(
+                                  employee?.imageURL != null ? 0 : 2),
+                              color: employee?.imageURL != null
+                                  ? Colors.transparent
+                                  : Colors.black.withOpacity(0.05),
+                            ),
+                            clipBehavior: Clip.hardEdge,
+                            alignment: Alignment.center,
+                            child: employee?.imageURL != null
+                                ? OverflowBox(
+                                    minWidth: 0,
+                                    minHeight: 0,
+                                    maxHeight: double.infinity,
+                                    child: Image.network(
+                                      employee.imageURL,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  )
+                                : SizedBox(
+                                    width: (MediaQuery.of(context).size.width -
+                                            30) *
+                                        0.5,
+                                    height: (MediaQuery.of(context).size.width -
+                                            30) *
+                                        0.5,
+                                    child: Image.asset("imgs/user.png")),
+                          ),
                           Positioned(
                             bottom: 0,
                             child: Column(
@@ -61,7 +93,7 @@ class FeaturedItemWidget extends StatelessWidget {
                                         padding: const EdgeInsets.symmetric(
                                             vertical: 10),
                                         child: Text(
-                                          "Shehriyar Shariq",
+                                          employee.name,
                                           style: TextStyle(
                                               fontSize: 17,
                                               color: Colors.black
@@ -69,7 +101,7 @@ class FeaturedItemWidget extends StatelessWidget {
                                         ),
                                       ),
                                       Text(
-                                        "CTO",
+                                        employee.designation,
                                         style: TextStyle(
                                             color:
                                                 Colors.black.withOpacity(0.6)),
@@ -83,6 +115,37 @@ class FeaturedItemWidget extends StatelessWidget {
                               ],
                             ),
                           )
+                        ] else ...[
+                          Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(2),
+                              color: employee?.imageURL != null
+                                  ? Colors.transparent
+                                  : Colors.black.withOpacity(0.05),
+                            ),
+                            clipBehavior: Clip.hardEdge,
+                            alignment: Alignment.center,
+                            child: employee?.imageURL != null
+                                ? OverflowBox(
+                                    minWidth: 0,
+                                    minHeight: 0,
+                                    maxHeight: double.infinity,
+                                    child: Image.network(
+                                      employee.imageURL,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  )
+                                : SizedBox(
+                                    width: (MediaQuery.of(context).size.width -
+                                            30) *
+                                        0.45 *
+                                        0.3,
+                                    height: (MediaQuery.of(context).size.width -
+                                            30) *
+                                        0.45 *
+                                        0.3,
+                                    child: Image.asset("imgs/user.png")),
+                          ),
                         ]
                       ],
                     ),
@@ -123,13 +186,13 @@ class FeaturedItemWidget extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.only(bottom: 10),
                   child: Text(
-                    "Shehriyar Shariq Shariq Shariq",
+                    employee.name,
                     style: TextStyle(
                         fontSize: 14, color: Colors.black.withOpacity(0.8)),
                   ),
                 ),
                 Text(
-                  "CTO",
+                  employee.designation,
                   style: TextStyle(color: Colors.black.withOpacity(0.6)),
                 ),
                 SizedBox(
